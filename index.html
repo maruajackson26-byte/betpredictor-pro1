@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetPredictor Pro — AI Betting Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{--bg:#060810;--surface:#0d1117;--surface2:#161b27;--border:#1e2535;--accent:#00e5ff;--accent2:#7c3aed;--gold:#f59e0b;--green:#10b981;--red:#ef4444;--text:#e2e8f0;--muted:#64748b;--font:'Space Grotesk',sans-serif;--mono:'Space Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.03)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.03)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+header{position:sticky;top:0;z-index:100;background:rgba(6,8,16,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+.logo{font-size:1.5rem;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:flex;align-items:center;gap:0.6rem;}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:bold;font-size:0.9rem;-webkit-text-fill-color:#000;}
+.nav{display:flex;gap:2rem;}
+.nav a{color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.3s;font-size:0.95rem;}
+.nav a:hover{color:var(--accent);}
+.btn{padding:0.6rem 1.4rem;border-radius:8px;border:none;font-family:var(--font);font-weight:600;cursor:pointer;transition:all 0.3s;font-size:0.95rem;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;box-shadow:0 4px 15px rgba(0,229,255,0.2);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,229,255,0.3);}
+.hero{position:relative;z-index:1;padding:8rem 2rem 4rem;text-align:center;max-width:900px;margin:0 auto;}
+.hero-badge{display:inline-block;padding:0.4rem 1rem;background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.3);border-radius:20px;color:var(--accent);font-size:0.85rem;font-weight:600;margin-bottom:1.5rem;font-family:var(--mono);}
+.hero h1{font-size:4rem;font-weight:700;line-height:1.1;margin-bottom:1.5rem;letter-spacing:-1px;}
+.hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{font-size:1.25rem;color:var(--muted);margin-bottom:2.5rem;line-height:1.6;max-width:700px;margin-left:auto;margin-right:auto;}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;max-width:1200px;margin:2rem auto 5rem;padding:0 2rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;transition:all 0.3s ease;position:relative;overflow:hidden;}
+.stat-card:hover{transform:translateY(-5px);border-color:rgba(0,229,255,0.3);}
+.stat-value{font-size:2.5rem;font-weight:700;color:var(--accent);font-family:var(--mono);margin-bottom:0.5rem;}
+.stat-label{color:var(--muted);font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;font-weight:500;}
+.predictions-section,.history-section{max-width:1200px;margin:0 auto;padding:0 2rem 5rem;}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.section-title{font-size:2rem;font-weight:700;display:flex;align-items:center;gap:1rem;}
+.section-title::before{content:'';width:4px;height:28px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:2px;}
+.live-indicator{display:flex;align-items:center;gap:0.5rem;color:var(--green);font-family:var(--mono);font-size:0.9rem;font-weight:600;}
+.live-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,0.7);}70%{box-shadow:0 0 0 10px rgba(16,185,129,0);}100%{box-shadow:0 0 0 0 rgba(16,185,129,0);}}
+.table-container{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.2);}
+.table-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:600px;}
+th,td{padding:1.2rem 1.5rem;text-align:left;border-bottom:1px solid var(--border);}
+th{background:var(--surface2);color:var(--muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;font-family:var(--mono);}
+tr:last-child td{border-bottom:none;}
+tbody tr{transition:background 0.2s;}
+tbody tr:hover{background:rgba(0,229,255,0.03);}
+.match-info{display:flex;flex-direction:column;gap:0.2rem;}
+.match-teams{font-weight:600;font-size:1rem;}
+.match-league{font-size:0.8rem;color:var(--muted);}
+.confidence{padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600;display:inline-block;font-family:var(--mono);}
+.confidence.high{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3);}
+.confidence.medium{background:rgba(245,158,11,0.15);color:var(--gold);border:1px solid rgba(245,158,11,0.3);}
+.odds{font-family:var(--mono);font-weight:600;color:var(--gold);}
+.history-summary{display:flex;gap:0.5rem;align-items:center;}
+.summary-badge{padding:0.4rem 0.8rem;border-radius:20px;font-size:0.85rem;font-weight:600;font-family:var(--mono);}
+.summary-win{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3);}
+.summary-loss{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3);}
+.result-badge{padding:0.3rem 0.8rem;border-radius:6px;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;font-family:var(--mono);}
+.result-badge.win{background:rgba(16,185,129,0.15);color:var(--green);}
+.result-badge.loss{background:rgba(239,68,68,0.15);color:var(--red);}
+.pl-positive{color:var(--green);font-family:var(--mono);font-weight:600;}
+.pl-negative{color:var(--red);font-family:var(--mono);font-weight:600;}
+footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;color:var(--muted);font-size:0.9rem;position:relative;z-index:1;}
+@media(max-width:768px){.nav{display:none;}.hero h1{font-size:2.5rem;}.hero p{font-size:1rem;}.stat-value{font-size:2rem;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">BP</div>
+    BetPredictor Pro
+  </div>
+  <nav class="nav">
+    <a href="#predictions">Predictions</a>
+    <a href="#history">History</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+  </nav>
+  <button class="btn btn-primary">Get Started</button>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-badge">🚀 AI MODEL V4.2 LIVE</div>
+    <h1>Next-Gen <span>Betting Intelligence</span></h1>
+    <p>Harness the power of advanced machine learning algorithms to analyze thousands of data points, providing you with highly accurate predictions and actionable insights.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary">View Live Predictions</button>
+      <button class="btn btn-primary" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);">How it Works</button>
+    </div>
+  </section>
+
+  <section class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">87.4%</div>
+      <div class="stat-label">Win Rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">+142.5u</div>
+      <div class="stat-label">ROI (YTD)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">12,450</div>
+      <div class="stat-label">Active Users</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">24/7</div>
+      <div class="stat-label">AI Monitoring</div>
+    </div>
+  </section>
+
+  <section class="predictions-section" id="predictions">
+    <div class="section-header">
+      <h2 class="section-title">Top AI Predictions Today</h2>
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        LIVE DATA FEED
+      </div>
+    </div>
+    <div class="table-container">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Match</th>
+              <th>Prediction</th>
+              <th>Odds</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="match-info"><div class="match-teams">Man City vs Arsenal</div><div class="match-league">Premier League • 15:00</div></div></td>
+              <td>Over 2.5 Goals</td>
+              <td class="odds">1.85</td>
+              <td><span class="confidence high">High (92%)</span></td>
+            </tr>
+            <tr>
+              <td><div class="match-info"><div class="match-teams">Lakers vs Celtics</div><div class="match-league">NBA • 19:30</div></div></td>
+              <td>Lakers -4.5</td>
+              <td class="odds">1.90</td>
+              <td><span class="confidence high">High (88%)</span></td>
+            </tr>
+            <tr>
+              <td><div class="match-info"><div class="match-teams">Djokovic vs Alcaraz</div><div class="match-league">Wimbledon • 14:00</div></div></td>
+              <td>Over 38.5 Games</td>
+              <td class="odds">2.10</td>
+              <td><span class="confidence medium">Med (76%)</span></td>
+            </tr>
+            <tr>
+              <td><div class="match-info"><div class="match-teams">Real Madrid vs Bayern</div><div class="match-league">Champions League • 20:00</div></div></td>
+              <td>Both Teams to Score</td>
+              <td class="odds">1.65</td>
+              <td><span class="confidence high">High (95%)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="history-section" id="history">
+    <div class="section-header">
+      <h2 class="section-title">AI Betting History & Performance</h2>
+      <div class="history-summary">
+        <span class="summary-badge summary-win">W: 18</span>
+        <span class="summary-badge summary-loss">L: 4</span>
+        <span class="summary-badge summary-win">ROI: +142.5u</span>
+      </div>
+    </div>
+    <div class="table-container">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Match</th>
+              <th>Prediction</th>
+              <th>Odds</th>
+              <th>Result</th>
+              <th>P/L (Units)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-family:var(--mono);color:var(--muted);">Jun 26</td>
+              <td><div class="match-info"><div class="match-teams">Man City vs Arsenal</div><div class="match-league">Premier League</div></div></td>
+              <td>Over 2.5 Goals</td>
+              <td class="odds">1.85</td>
+              <td><span class="result-badge win">WIN</span></td>
+              <td class="pl-positive">+85.0u</td>
+            </tr>
+            <tr>
+              <td style="font-family:var(--mono);color:var(--muted);">Jun 26</td>
+              <td><div class="match-info"><div class="match-teams">Lakers vs Celtics</div><div class="match-league">NBA</div></div></td>
+              <td>Lakers -4.5</td>
+              <td class="odds">1.90</td>
+              <td><span class="result-badge win">WIN</span></td>
+              <td class="pl-positive">+90.0u</td>
+            </tr>
+            <tr>
+              <td style="font-family:var(--mono);color:var(--muted);">Jun 25</td>
+              <td><div class="match-info"><div class="match-teams">Djokovic vs Alcaraz</div><div class="match-league">Wimbledon</div></div></td>
+              <td>Over 38.5 Games</td>
+              <td class="odds">2.10</td>
+              <td><span class="result-badge loss">LOSS</span></td>
+              <td class="pl-negative">-100.0u</td>
+            </tr>
+            <tr>
+              <td style="font-family:var(--mono);color:var(--muted);">Jun 24</td>
+              <td><div class="match-info"><div class="match-teams">Yankees vs Dodgers</div><div class="match-league">MLB</div></div></td>
+              <td>Over 8.5 Runs</td>
+              <td class="odds">1.95</td>
+              <td><span class="result-badge win">WIN</span></td>
+              <td class="pl-positive">+95.0u</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2026 BetPredictor Pro. All rights reserved.</p>
+  <p style="font-size:0.8rem;max-width:600px;margin:1rem auto 0;line-height:1.5;">Must be 18+ to participate. Please gamble responsibly.</p>
+</footer>
+
+<script>
+  const API_BASE = window.location.origin + '/api';
+  
+  async function loadPredictions() {
+    try {
+      const response = await fetch(`${API_BASE}/predictions/today`);
+      const data = await response.json();
+      console.log('Predictions loaded:', data);
+    } catch (error) {
+      console.log('Using demo data - API not connected yet');
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', loadPredictions);
+</script>
+
+</body>
+</html>
